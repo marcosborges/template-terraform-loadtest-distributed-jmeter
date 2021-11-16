@@ -61,6 +61,9 @@ jobs:
         name: plan-artifact
         path: '.'
     
+    - name: chmod777
+      run: chmod 777 .iac/ -R
+
     - name: Display structure of downloaded files
       run: ls -Rlah
 
