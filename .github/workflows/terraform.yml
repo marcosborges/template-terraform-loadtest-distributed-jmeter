@@ -79,6 +79,15 @@ jobs:
       with:
         name: apply-artifact
         path: './'
+    - name: Commit changes
+      uses: EndBug/add-and-commit@v7
+      with:
+        author_name: GitHub Action
+        author_email: 41898282+github-actions[bot]@users.noreply.github.com
+        committer_name: GitHub Action
+        committer_email: 41898282+github-actions[bot]@users.noreply.github.com
+        message: 'Your commit message [skip ci]'
+        add: 'iac/terraform.tfstate'
 
   terraform-destroy:
     name: 'Terraform Destroy'
