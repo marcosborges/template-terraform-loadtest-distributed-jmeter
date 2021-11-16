@@ -41,7 +41,7 @@ jobs:
     - name: Publish artifact
       uses: actions/upload-artifact@v2
       with:
-        name: published
+        name: published-plan
         path: './'
 
   terraform-apply:
@@ -54,12 +54,15 @@ jobs:
       run:
         shell: bash
     steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
     # Download published artifact
     - name: Download artifact
       uses: actions/download-artifact@v2
       with:
-        name: published
-        path: './'
+        name: published-plan
+        path: './published'
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
@@ -70,6 +73,12 @@ jobs:
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve
       working-directory: ./iac
+    # Publish artifact
+    - name: Publish artifact
+      uses: actions/upload-artifact@v2
+      with:
+        name: published-apply
+        path: './'
 
   terraform-destroy:
     name: 'Terraform Destroy'
@@ -81,12 +90,15 @@ jobs:
       run:
         shell: bash
     steps:
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
     # Download published artifact
     - name: Download artifact
       uses: actions/download-artifact@v2
       with:
-        name: published
-        path: './'
+        name: published-apply
+        path: './published'
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
