@@ -87,7 +87,8 @@ jobs:
         committer_name: GitHub Action
         committer_email: 41898282+github-actions[bot]@users.noreply.github.com
         message: 'Your commit message [skip ci]'
-        add: 'iac/terraform.tfstate'
+        add: 'iac/terraform.tfstate --force'
+        push: true
 
   terraform-destroy:
     name: 'Terraform Destroy'
