@@ -14,7 +14,7 @@ env:
 jobs:
   
   terraform-plan:
-    name: 'Terraform'
+    name: 'Terraform Plan'
     runs-on: ubuntu-latest
     environment: plan
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
@@ -45,7 +45,7 @@ jobs:
         path: './'
 
   terraform-apply:
-    name: 'Terraform apply'
+    name: 'Terraform Apply'
     runs-on: ubuntu-latest
     environment: apply
     needs: terraform-plan
@@ -68,7 +68,7 @@ jobs:
       working-directory: ./iac
 
   terraform-destroy:
-    name: 'Terraform destroy'
+    name: 'Terraform Destroy'
     runs-on: ubuntu-latest
     environment: destroy
     needs: terraform-apply
