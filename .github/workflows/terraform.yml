@@ -67,8 +67,7 @@ jobs:
       run: terraform apply -auto-approve
       working-directory: ./iac
 
-
-terraform-destroy:
+  terraform-destroy:
     name: 'Terraform destroy'
     runs-on: ubuntu-latest
     environment: destroy
