@@ -41,7 +41,7 @@ jobs:
     - name: Publish artifact
       uses: actions/upload-artifact@v2
       with:
-        name: published-plan
+        name: plan-artifact
         path: './'
 
   terraform-apply:
@@ -54,31 +54,32 @@ jobs:
       run:
         shell: bash
     steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v2
     # Download published artifact
     - name: Download artifact
       uses: actions/download-artifact@v2
       with:
-        name: published-plan
-        path: './published'
+        name: plan-artifact
+        path: '.'
+    
+    - name: Display structure of downloaded files
+      run: ls -R
+
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
-      working-directory: ./iac
+      working-directory: ./plan-artifact/iac
     # On push to master, build or change infrastructure according to Terraform configuration files
     # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve
-      working-directory: ./iac
+      working-directory: ./plan-artifact/iac
     # Publish artifact
     - name: Publish artifact
       uses: actions/upload-artifact@v2
       with:
-        name: published-apply
-        path: './'
+        name: apply-artifact
+        path: './plan-artifact/iac'
 
   terraform-destroy:
     name: 'Terraform Destroy'
@@ -90,23 +91,21 @@ jobs:
       run:
         shell: bash
     steps:
-    # Checkout the repository to the GitHub Actions runner
-    - name: Checkout
-      uses: actions/checkout@v2
+    
     # Download published artifact
     - name: Download artifact
       uses: actions/download-artifact@v2
       with:
-        name: published-apply
-        path: './published'
+        name: apply-artifact
+        path: './'
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
       run: terraform init
-      working-directory: ./iac
+      working-directory: ./apply-artifact
     # On push to master, build or change infrastructure according to Terraform configuration files
     # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Destroy
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform destroy -auto-approve
-      working-directory: ./iac
+      working-directory: ./apply-artifact
     

@@ -2,7 +2,7 @@ module "loadtest" {
 
   source = "marcosborges/loadtest-distribuited/aws"
 
-  name = "execution-name-jmeter"
+  name = "execution-name-jmeter-loadtest"
 
   executor            = var.executor
   loadtest_dir_source = "../plans/"
