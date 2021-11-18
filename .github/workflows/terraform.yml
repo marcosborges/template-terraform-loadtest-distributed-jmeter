@@ -10,7 +10,7 @@ env:
   AWS_DEFAULT_REGION: us-east-1
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-  VAULT_CODE: ${{ secrets.VAULT_CODE }}
+  TF_STATE_BUCKET_NAME : ${{ secrets.TF_STATE_BUCKET_NAME }}
 
 jobs:
   
@@ -28,7 +28,7 @@ jobs:
       uses: actions/checkout@v2
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -backend-config="bucket=${{ env.TF_STATE_BUCKET_NAME }}"
       working-directory: ./iac
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
@@ -38,12 +38,6 @@ jobs:
     - name: Terraform Plan
       run: terraform plan
       working-directory: ./iac
-    # Publish artifact
-    - name: Publish artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: plan-artifact
-        path: './'
 
   terraform-apply:
     name: 'Terraform Apply'
@@ -55,19 +49,13 @@ jobs:
       run:
         shell: bash
     steps:
-    # Download published artifact
-    - name: Download artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: plan-artifact
-        path: '.'
-    
-    - name: filesystem
-      run: chmod 777 ./iac -R
-
-    - name: Display structure of downloaded files
-      run: ls -Rlah
-
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init -backend-config="bucket=${{ env.TF_STATE_BUCKET_NAME }}"
+      working-directory: ./iac
     # On push to master, build or change infrastructure according to Terraform configuration files
     # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Apply
@@ -91,20 +79,13 @@ jobs:
       run:
         shell: bash
     steps:
-    
-    # Download published artifact
-    - name: Download artifact
-      uses: actions/download-artifact@v2
-      with:
-        name: apply-artifact
-        path: './'
-    
-    - name: filesystem
-      run: chmod 777 ./iac -R
-      
-    - name: Display structure of downloaded files
-      run: ls -Rlah
-
+    # Checkout the repository to the GitHub Actions runner
+    - name: Checkout
+      uses: actions/checkout@v2
+    # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
+    - name: Terraform Init
+      run: terraform init -backend-config="bucket=${{ env.TF_STATE_BUCKET_NAME }}"
+      working-directory: ./iac
     # On push to master, build or change infrastructure according to Terraform configuration files
     # Note: It is recommended to set up a required "strict" status check in your repository for "Terraform Cloud". See the documentation on "strict" required status checks for more information: https://help.github.com/en/github/administering-a-repository/types-of-required-status-checks
     - name: Terraform Destroy
