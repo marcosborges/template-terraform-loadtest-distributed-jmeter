@@ -62,12 +62,6 @@ jobs:
       if: github.ref == 'refs/heads/main' && github.event_name == 'push'
       run: terraform apply -auto-approve
       working-directory: ./iac
-    # Publish artifact
-    - name: Publish artifact
-      uses: actions/upload-artifact@v2
-      with:
-        name: apply-artifact
-        path: './'
 
   terraform-destroy:
     name: 'Terraform Destroy'
