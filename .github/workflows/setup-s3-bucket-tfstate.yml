@@ -26,7 +26,7 @@ jobs:
     steps:
     - name: Create bucket
       
-      run: 'aws s3api create-bucket --bucket "tfstates_${{ github.action }}" --region ${{ env.AWS_DEFAULT_REGION }} --acl private --object-lock-enabled-for-bucket --output yaml'
+      run: 'aws s3api create-bucket --bucket "tfstates_${{ github.job }}" --region ${{ env.AWS_DEFAULT_REGION }} --acl private --object-lock-enabled-for-bucket --output yaml'
 
     #- name: Bucket tagging
     #  uses: docker://amazon/aws-cli:2.0.7
