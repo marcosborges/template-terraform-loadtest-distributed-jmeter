@@ -1,4 +1,4 @@
-# Template For Terraform Loadtest Distributed
+# Template For Terraform Loadtest Distributed With JMeter
 
 The repository goal is to provide an uncomplicated way to start a distributed load testing project using Jmeter as the executor and Terraform as the IaS provisioning.
 
