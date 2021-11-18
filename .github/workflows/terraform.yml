@@ -10,6 +10,7 @@ env:
   AWS_DEFAULT_REGION: us-east-1
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  VAULT_CODE: ${{ secrets.VAULT_CODE }}
 
 jobs:
   
@@ -79,16 +80,6 @@ jobs:
       with:
         name: apply-artifact
         path: './'
-    - name: Commit changes
-      uses: EndBug/add-and-commit@v7
-      with:
-        author_name: GitHub Action
-        author_email: 41898282+github-actions[bot]@users.noreply.github.com
-        committer_name: GitHub Action
-        committer_email: 41898282+github-actions[bot]@users.noreply.github.com
-        message: 'Your commit message [skip ci]'
-        add: 'iac/terraform.tfstate --force'
-        push: true
 
   terraform-destroy:
     name: 'Terraform Destroy'
