@@ -1,3 +1,4 @@
+
 # This is a basic workflow that is manually triggered
 
 name: Setup Bucket TFState
@@ -20,24 +21,26 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
+    
     steps:
     - name: Create bucket
       uses: docker://amazon/aws-cli:2.0.7
       with:
-        args: s3api create-bucket --bucket "tfstates-$GITHUB_ACTION" --region $AWS_DEFAULT_REGION --acl private --object-lock-enabled-for-bucket --output yaml
-    - name: Bucket tagging
-      uses: docker://amazon/aws-cli:2.0.7
-      with:
-        args: s3api put-bucket-tagging --bucket "tfstates-$GITHUB_ACTION"  --region $AWS_DEFAULT_REGION --tagging "TagSet=[{Key=Name,Value=$BUCKET_NAME}]" --output yaml
-          
-    - name: Bucket versioning
-      uses: docker://amazon/aws-cli:2.0.7
-      with:
-        args: s3api put-bucket-versioning --bucket "tfstates-$GITHUB_ACTION"  --region $AWS_DEFAULT_REGION --versioning-configuration Status=Enabled --output yaml 
+        args: s3api create-bucket --bucket tfstates-$GITHUB_ACTION --region $AWS_DEFAULT_REGION --acl private --object-lock-enabled-for-bucket --output yaml
     
-    - name: Bucket encryption
-      uses: docker://amazon/aws-cli:2.0.7
-      with:
-        args: s3api put-bucket-encryption --bucket "tfstates-$GITHUB_ACTION"  --region $AWS_DEFAULT_REGION --server-side-encryption-configuration '{"Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]}' --output yaml
+    #- name: Bucket tagging
+    #  uses: docker://amazon/aws-cli:2.0.7
+    #  with:
+    #    args: s3api put-bucket-tagging --bucket "tfstates-$GITHUB_ACTION"  --region $AWS_DEFAULT_REGION --tagging "TagSet=[{Key=Name,Value=$BUCKET_NAME}]" --output yaml
+    #      
+    #- name: Bucket versioning
+    #  uses: docker://amazon/aws-cli:2.0.7
+    #  with:
+    #    args: s3api put-bucket-versioning --bucket "tfstates-$GITHUB_ACTION"  --region $AWS_DEFAULT_REGION --versioning-configuration Status=Enabled --output yaml 
+    # 
+    #- name: Bucket encryption
+    #  uses: docker://amazon/aws-cli:2.0.7
+    #  with:
+    #    args: s3api put-bucket-encryption --bucket "tfstates-$GITHUB_ACTION"  --region $AWS_DEFAULT_REGION --server-side-encryption-configuration '{"Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]}' --output yaml
           
 
