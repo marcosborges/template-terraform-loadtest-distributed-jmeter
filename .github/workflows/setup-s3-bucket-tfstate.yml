@@ -28,8 +28,8 @@ jobs:
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
         AWS_DEFAULT_REGION: us-east-1
       with:
-        entrypoint: "/bin/sh -c"
-        pre-entrypoint: "/bin/sh -c"
+        entrypoint: "/bin/sh"
+        #pre-entrypoint: "/bin/sh"
         args: | 
           BUCKET_NAME="tfstates-$GITHUB_ACTION"
           echo "CREATE BUCKET $BUCKET_NAME"
