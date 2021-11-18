@@ -6,6 +6,7 @@ name: 04-manual-terraform-destroy
 env:
   AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
   AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+  TF_STATE_BUCKET_NAME : ${{ secrets.TF_STATE_BUCKET_NAME }}
 
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
@@ -13,10 +14,6 @@ on:
   workflow_dispatch:
     # Inputs the workflow accepts.
     inputs: 
-      bucket_name:
-        description: 'Bucket name to storage tf state'
-        required: true
-        default: 'tfstate-example-update-here'
       aws_region:
         description: 'AWS region'
         required: true
@@ -41,7 +38,7 @@ jobs:
       uses: actions/checkout@v2
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -backend-config="bucket=${{ env.TF_STATE_BUCKET_NAME }}"
       working-directory: ./iac
     # Checks that all Terraform configuration files adhere to a canonical format
     - name: Terraform Format
@@ -69,7 +66,7 @@ jobs:
       uses: actions/checkout@v2
     # Initialize a new or existing Terraform working directory by creating initial files, loading any remote state, downloading modules, etc.
     - name: Terraform Init
-      run: terraform init
+      run: terraform init -backend-config="bucket=${{ env.TF_STATE_BUCKET_NAME }}"
       working-directory: ./iac
 
     - name: Terraform Destroy
