@@ -1,0 +1,76 @@
+# This is a basic workflow that is manually triggered
+
+name: Setup Bucket TFState
+
+env:
+  AWS_DEFAULT_REGION: us-east-1
+  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+
+# Controls when the action will run. Workflow runs when manually triggered using the UI
+# or API.
+on:
+  workflow_dispatch:
+    # Inputs the workflow accepts.
+    inputs:
+      name:
+        # Friendly description to be shown in the UI instead of 'name'
+        description: 'Person to greet'
+        # Default value if no value is explicitly provided
+        default: 'World'
+        # Input has to be provided for the workflow to run
+        required: true
+
+# A workflow run is made up of one or more jobs that can run sequentially or in parallel
+jobs:
+  # This workflow contains a single job called "greet"
+  greet:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+    # Runs a single command using the runners shell
+    - name: Send greeting
+      run: echo "Hello ${{ github.event.inputs.name }}"
+
+    - name: Send greeting
+      uses: docker://amazon/aws-cli:2.0.7
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1
+      with:
+        args: | 
+          
+          BUCKET_NAME="tfstates-$GITHUB_ACTION"
+
+          echo "CREATE BUCKET $BUCKET_NAME"
+
+          s3api create-bucket --bucket $BUCKET_NAME  \
+            --region $AWS_DEFAULT_REGION \
+            --acl private \
+            --object-lock-enabled-for-bucket \
+            --output yaml
+          
+          aws s3api put-bucket-tagging \
+            --bucket $BUCKET_NAME  \
+            --region $AWS_DEFAULT_REGION \
+            --tagging "TagSet=[{Key=Name,Value=$BUCKET_NAME}]" \
+            --output yaml
+              
+          aws s3api put-bucket-versioning \
+            --bucket $BUCKET_NAME  \
+            --region $AWS_DEFAULT_REGION \
+            --versioning-configuration Status=Enabled \
+            --output yaml
+
+          aws s3api put-bucket-encryption \
+            --bucket $BUCKET_NAME  \
+            --region $AWS_DEFAULT_REGION \
+            --server-side-encryption-configuration '{"Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]}' \
+            --output yaml
+
+          
+          
+
