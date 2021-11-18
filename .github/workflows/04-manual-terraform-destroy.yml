@@ -49,7 +49,7 @@ jobs:
       working-directory: ./iac
     # Generates an execution plan for Terraform
     - name: Terraform Plan
-      run: terraform plan
+      run: terraform plan -destroy
       working-directory: ./iac
 
   terraform-destroy:
