@@ -24,23 +24,28 @@ on:
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
 jobs:
   # This workflow contains a single job called "greet"
-  greet:
+  setup_bucket_tfstate:
     # The type of runner that the job will run on
-    runs-on: ubuntu-latest
+    runs:
+      using: 'docker'
+      image: 'amazon/aws-cli:2.0.7'
+      pre-entrypoint: ""
+      entrypoint: ""
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_DEFAULT_REGION: us-east-1
 
     # Steps represent a sequence of tasks that will be executed as part of the job
     steps:
     # Runs a single command using the runners shell
     - name: Send greeting
       run: echo "Hello ${{ github.event.inputs.name }}"
+    
 
     - name: Send greeting
-      uses: docker://amazon/aws-cli:2.0.7
-      entrypoint: ''
-      env:
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_DEFAULT_REGION: us-east-1
+      using: 'docker'
+      
       with:
         args: | 
           
