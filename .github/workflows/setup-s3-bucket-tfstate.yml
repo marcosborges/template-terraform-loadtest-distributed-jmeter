@@ -26,22 +26,15 @@ jobs:
       image: amazon/aws-cli:2.0.7
     steps:
     - name: Create bucket
-      
       run: 'aws s3api create-bucket --bucket ${{ env.BUCKET_NAME }} --region ${{ env.AWS_DEFAULT_REGION }} --acl private --object-lock-enabled-for-bucket --output yaml'
 
-    #- name: Bucket tagging
-    #  uses: docker://amazon/aws-cli:2.0.7
-    #  with:
-    #    args: s3api put-bucket-tagging --bucket "tfstates-$GITHUB_ACTION"  --region $AWS_DEFAULT_REGION --tagging "TagSet=[{Key=Name,Value=$BUCKET_NAME}]" --output yaml
-    #      
-    #- name: Bucket versioning
-    #  uses: docker://amazon/aws-cli:2.0.7
-    #  with:
-    #    args: s3api put-bucket-versioning --bucket "tfstates-$GITHUB_ACTION"  --region $AWS_DEFAULT_REGION --versioning-configuration Status=Enabled --output yaml 
-    # 
+    - name: Bucket tagging
+      run: 'aws s3api put-bucket-tagging --bucket ${{ env.BUCKET_NAME }} --region ${{ env.AWS_DEFAULT_REGION }} --tagging "TagSet=[{Key=Name,Value=$BUCKET_NAME}]" --output yaml'
+          
+    - name: Bucket versioning
+      run: 'aws s3api put-bucket-versioning --bucket "tfstates-$GITHUB_ACTION"  --region $AWS_DEFAULT_REGION --versioning-configuration Status=Enabled --output yaml'
+     
     #- name: Bucket encryption
-    #  uses: docker://amazon/aws-cli:2.0.7
-    #  with:
-    #    args: s3api put-bucket-encryption --bucket "tfstates-$GITHUB_ACTION"  --region $AWS_DEFAULT_REGION --server-side-encryption-configuration '{"Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]}' --output yaml
+    #  run: 'aws s3api put-bucket-encryption --bucket "tfstates-$GITHUB_ACTION"  --region $AWS_DEFAULT_REGION --server-side-encryption-configuration ''{"Rules": [{"ApplyServerSideEncryptionByDefault": {"SSEAlgorithm": "AES256"}}]}'' --output yaml'
           
 
