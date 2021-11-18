@@ -21,13 +21,13 @@ jobs:
     # The type of runner that the job will run on
     runs-on: ubuntu-latest
     # Steps represent a sequence of tasks that will be executed as part of the job
-    
+    container:
+      image: amazon/aws-cli:2.0.7
     steps:
     - name: Create bucket
-      uses: docker://amazon/aws-cli:2.0.7
       with:
         args: s3api create-bucket --bucket tfstates-$GITHUB_ACTION --region $AWS_DEFAULT_REGION --acl private --object-lock-enabled-for-bucket --output yaml
-    
+
     #- name: Bucket tagging
     #  uses: docker://amazon/aws-cli:2.0.7
     #  with:
