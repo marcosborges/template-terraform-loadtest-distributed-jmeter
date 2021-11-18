@@ -44,7 +44,7 @@ In the .github folder you find the workflows for continuous deployment based on 
 
 6. Put your jmx load scripts in the plans folder.
 
-7. Set the name of script file plan script and subnet in the provisioning module entrypoint at `iac/main.tf`;
+7. Set the name of script file plan script and subnet in the provisioning module at `iac/main.tf`;
 
 8. Run manual workflow `02-manual-terraform-plan` to visualize the plan result.
 
