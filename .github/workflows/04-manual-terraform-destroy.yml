@@ -52,13 +52,13 @@ jobs:
       run: terraform plan
       working-directory: ./iac
 
-  terraform-apply:
+  terraform-destroy:
     name: 'Terraform Destroy'
     runs-on: ubuntu-latest
-    environment: apply
+    environment: destroy
     env:
       AWS_DEFAULT_REGION: ${{ github.event.inputs.aws_region }}
-    needs: terraform-destroy
+    needs: terraform-plan
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
