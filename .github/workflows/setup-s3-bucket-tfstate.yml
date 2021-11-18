@@ -32,7 +32,7 @@ jobs:
       run: 'aws s3api create-bucket --bucket ${{ github.event.inputs.bucket_name }} --region ${{ env.AWS_DEFAULT_REGION }} --acl private --object-lock-enabled-for-bucket --output yaml'
 
     - name: Bucket tagging
-      run: 'aws s3api put-bucket-tagging --bucket ${{ github.event.inputs.bucket_name }} --region ${{ env.AWS_DEFAULT_REGION }} --tagging "TagSet=[{Key=Name,Value=$BUCKET_NAME}]" --output yaml'
+      run: 'aws s3api put-bucket-tagging --bucket ${{ github.event.inputs.bucket_name }} --region ${{ env.AWS_DEFAULT_REGION }} --tagging "TagSet=[{Key=Name,Value=${{ github.event.inputs.bucket_name }}}]" --output yaml'
           
     - name: Bucket versioning
       run: 'aws s3api put-bucket-versioning --bucket ${{ github.event.inputs.bucket_name }} --region ${{ env.AWS_DEFAULT_REGION }}  --versioning-configuration Status=Enabled --output yaml'
