@@ -36,6 +36,7 @@ jobs:
 
     - name: Send greeting
       uses: docker://amazon/aws-cli:2.0.7
+      entrypoint: ''
       env:
         AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
         AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
@@ -47,7 +48,7 @@ jobs:
 
           echo "CREATE BUCKET $BUCKET_NAME"
 
-          s3api create-bucket --bucket $BUCKET_NAME  \
+          aws s3api create-bucket --bucket $BUCKET_NAME  \
             --region $AWS_DEFAULT_REGION \
             --acl private \
             --object-lock-enabled-for-bucket \
