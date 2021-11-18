@@ -3,11 +3,6 @@
 
 name: 02-manual-terraform-plan
 
-env:
-  AWS_DEFAULT_REGION: us-east-1
-  AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-  AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-
 # Controls when the action will run. Workflow runs when manually triggered using the UI
 # or API.
 on:
@@ -18,13 +13,22 @@ on:
         description: 'Bucket name to storage tf state'
         required: true
         default: 'tfstate-example-update-here'
+      aws_region:
+        description: 'AWS region'
+        required: true
+        default: 'us-east-1'
 # A workflow run is made up of one or more jobs that can run sequentially or in parallel
+
 jobs:
 
   terraform-plan:
     name: 'Terraform Plan'
     runs-on: ubuntu-latest
     environment: plan
+    env:
+      AWS_DEFAULT_REGION: ${{ github.event.inputs.aws_region }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
     # Use the Bash shell regardless whether the GitHub Actions runner is ubuntu-latest, macos-latest, or windows-latest
     defaults:
       run:
