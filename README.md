@@ -18,11 +18,9 @@ In the .github folder you find the workflows for continuous deployment based on 
 
 ## How to use?
 
-1. After creating a fork of this repository, go to settings and define it as a template.
+1. Create a new repository using this template
 
-2. Create a new repository using the forked template
-
-3. Create the following secrets with their respective values ​​in your project settings:
+2. Create the following secrets with their respective values ​​in your project settings:
 
     - AWS_ACCESS_KEY_ID
 
@@ -30,7 +28,7 @@ In the .github folder you find the workflows for continuous deployment based on 
 
     - TF_STATE_BUCKET_NAME
 
-4. Create the following environments in the repository settings:
+3. Create the following environments in the repository settings:
 
     - plan
 
@@ -40,17 +38,17 @@ In the .github folder you find the workflows for continuous deployment based on 
 
     *Enable the approval feature (protection rules) for both apply and destroy environments.*    
 
-5. You can run the `01-manual-s3-bucket-tfstate` manual workflow to create the bucket that will store the terraform state file.
+4. You can run the `01-manual-s3-bucket-tfstate` manual workflow to create the bucket that will store the terraform state file.
 
-6. Put your jmx load scripts in the plans folder.
+5. Put your jmx load scripts in the plans folder.
 
-7. Set the name of script file plan script and subnet in the provisioning module at `iac/main.tf`;
+6. Set the name of script file plan script and subnet in the provisioning module at `iac/main.tf`;
 
-8. Run manual workflow `02-manual-terraform-plan` to visualize the plan result.
+7. Run manual workflow `02-manual-terraform-plan` to visualize the plan result.
 
-9. Run manual workflow `03-manual-terraform-apply` to apply provision.
+8. Run manual workflow `03-manual-terraform-apply` to apply provision.
 
-10. Run manual workflow `04-manual-terraform-destroy` to destroy provision.
+9. Run manual workflow `04-manual-terraform-destroy` to destroy provision.
 
 ---
 
